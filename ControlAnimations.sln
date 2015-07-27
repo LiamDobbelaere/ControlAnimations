@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlAnimations", "ControlAnimations\ControlAnimations.csproj", "{7C472FA0-06C2-4428-BF1F-D596586D9006}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ControlAnimatios_TestEnv", "ControlAnimatios_TestEnv\ControlAnimatios_TestEnv.vbproj", "{52BFD171-89B8-42A5-A048-D04D4C8338A1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7C472FA0-06C2-4428-BF1F-D596586D9006}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C472FA0-06C2-4428-BF1F-D596586D9006}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C472FA0-06C2-4428-BF1F-D596586D9006}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C472FA0-06C2-4428-BF1F-D596586D9006}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52BFD171-89B8-42A5-A048-D04D4C8338A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52BFD171-89B8-42A5-A048-D04D4C8338A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52BFD171-89B8-42A5-A048-D04D4C8338A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52BFD171-89B8-42A5-A048-D04D4C8338A1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
