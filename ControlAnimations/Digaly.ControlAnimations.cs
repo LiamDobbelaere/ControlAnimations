@@ -84,6 +84,11 @@ namespace Digaly
                 m_anims[name].SetState(state);
             }
 
+            /// <summary>
+            /// Sets the animation to a state without triggering it, mostly used after initalization if an animation has to behave reversed.
+            /// </summary>
+            /// <param name="name">The name of the animation.</param>
+            /// <param name="state">The state the animation will be set to: false = off, true = on</param>
             public void SetStateRaw(string name, bool state)
             {
                 m_anims[name].SetStateRaw(state);
@@ -126,7 +131,8 @@ namespace Digaly
             private enum AnimationType
             {
                 SingleValue,
-                Color
+                Color,
+                Double
             }
 
             /// <summary>
@@ -136,7 +142,7 @@ namespace Digaly
             /// <param name="propertyname">The name of the property to alter (Width, Height, Left,..)</param>
             /// <param name="changeinvalue">How much it has to change in value, it will move forth and back from the starting value plus this value.</param>
             /// <param name="animspeed">The speed of the animation. Higher is faster.</param>
-            public ControlAnimation(Control ctrl, string propertyname, double changeinvalue, double animspeed = 0.4)
+            public ControlAnimation(Control ctrl, string propertyname, int changeinvalue, double animspeed = 0.4)
             {
                 anitype = AnimationType.SingleValue;
                 m_animspeed = animspeed;
@@ -145,7 +151,7 @@ namespace Digaly
                 m_control = ctrl;
                 m_increase = changeinvalue;
 
-                m_startvalue = (int)m_control.GetPropertyValue(m_propertyname);
+                m_startvalue = (int) m_control.GetPropertyValue(m_propertyname);
 
                 m_anitimer = new Timer();
                 m_anitimer.Interval = 1;
@@ -175,6 +181,29 @@ namespace Digaly
                 m_anitimer.Tick += AnitimerTick;
 
                 //m_anitimer.Enabled = true;
+            }
+
+            /// <summary>
+            /// Creates a new animation.
+            /// </summary>
+            /// <param name="ctrl">The control to target (Button, TextBox, Panel,..).</param>
+            /// <param name="propertyname">The name of the property to alter (Width, Height, Left,..)</param>
+            /// <param name="changeinvalue">How much it has to change in value, it will move forth and back from the starting value plus this value.</param>
+            /// <param name="animspeed">The speed of the animation. Higher is faster.</param>
+            public ControlAnimation(Control ctrl, string propertyname, double min, double max, double animspeed = 0.4)
+            {
+                anitype = AnimationType.Double;
+                m_animspeed = animspeed;
+
+                m_propertyname = propertyname;
+                m_control = ctrl;
+                m_increase = max;
+
+                m_startvalue = min;
+
+                m_anitimer = new Timer();
+                m_anitimer.Interval = 1;
+                m_anitimer.Tick += AnitimerTick;
             }
 
             /// <summary>
@@ -223,7 +252,7 @@ namespace Digaly
 
                     m_control.SetPropertyValue(m_propertyname, Convert.ChangeType(newvalue, m_control.GetType().GetProperty(m_propertyname).PropertyType));
                 }
-                else
+                else if (anitype == AnimationType.Color)
                 {
                     int colorR, colorG, colorB;
 
@@ -238,7 +267,13 @@ namespace Digaly
 
                     m_control.SetPropertyValue(m_propertyname, Convert.ChangeType(newcolor, m_control.GetType().GetProperty(m_propertyname).PropertyType));
                 }
+                else if (anitype == AnimationType.Double)
+                {
+                    int newvalue = (int)EaseInOutCubic(m_time, state ? m_startvalue : m_startvalue + m_increase, state ? m_increase : -m_increase, 10);
+                    newvalue = newvalue.Clamp((int)m_startvalue, (int)(m_startvalue + m_increase));
 
+                    m_control.SetPropertyValue(m_propertyname, (double) newvalue / 100);
+                }
             }
 
             private double EaseInOutCubic(double t, double b, double c, double d)
@@ -298,6 +333,19 @@ namespace Digaly
             {
                 return new ControlAnimation(ctrl, propertyname, targetcolor, animspeed);
             }
+
+            /// <summary>
+            /// Creates a new animation.
+            /// </summary>
+            /// <param name="ctrl">The control to target (Button, TextBox, Panel,..).</param>
+            /// <param name="propertyname">The name of the property to alter (Width, Height, Left,..)</param>
+            /// <param name="changeinvalue">How much it has to change in value, it will move forth and back from the starting value plus this value.</param>
+            /// <param name="animspeed">The speed of the animation. Higher is faster.</param>
+            public static ControlAnimation MakeAnimation(this Control ctrl, string propertyname, double min, double max, double animspeed = 0.4)
+            {
+                return new ControlAnimation(ctrl, propertyname, min, max, animspeed);
+            }
+
 
             /// <summary>
             /// Extension method that clamps an integer between two values.
